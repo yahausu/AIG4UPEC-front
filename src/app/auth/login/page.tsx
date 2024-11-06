@@ -1,19 +1,28 @@
 "use client"
 import React, { useState } from 'react';
 import styles from './login.module.css';
+import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const validEmail = "user@example.com";
+  const validPassword = "password123";
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
 
+    // Check if credentials match
+    if (email === validEmail && password === validPassword) {
+      // Save login state (using localStorage for simplicity)
+      localStorage.setItem("isLoggedIn", "true");
+      router.push('/home'); // Redirect to a protected page
+    } else {
+      setError("Invalid email or password");
+    }
+  };
   return (
     <div className={styles.container}>
       <div className={styles.loginCard}>
@@ -47,3 +56,7 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+function setError(arg0: string) {
+    throw new Error('Function not implemented.');
+}
