@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import UtilityBar from '../components/utility-bar';
-import ChatInput from '@/components/chat-input';
-import Sidebar from '@/components/sidebar';
+import ChatInput from '../components/chat-input';
+import Sidebar from '../components/sidebar';
 
 const Home: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

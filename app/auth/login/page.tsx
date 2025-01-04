@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import styles from './login.module.css';
 import { useRouter } from 'next/navigation';
+import { auth, signIn, signOut } from '../../../auth'
 
-const Login: React.FC = () => {
+const Login: React.FC =  () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  
 
   const validEmail = "user@example.com";
   const validPassword = "password123";
@@ -50,6 +52,7 @@ const Login: React.FC = () => {
           </div>
           <button type="submit" className={styles.submitButton}>Login</button>
         </form>
+        
       </div>
     </div>
   );

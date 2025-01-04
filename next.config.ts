@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: '/auth/login',
-        permanent: false, // Set to true if this should always redirect
+        permanent: false, 
       },
     ];
   }
