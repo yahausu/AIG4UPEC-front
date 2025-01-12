@@ -1,6 +1,9 @@
 # Step 1: Use a Node.js image to build the React project
 FROM node:18-alpine AS build
 
+# Install Python and build dependencies (required by bcrypt)
+RUN apk add --no-cache python3 make g++ 
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -27,3 +30,4 @@ EXPOSE 3000
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
+

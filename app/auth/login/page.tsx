@@ -1,35 +1,37 @@
-"use client"
-import React, { useState } from 'react';
-import styles from './login.module.css';
-import { useRouter } from 'next/navigation';
-import { auth, signIn, signOut } from '../../../auth'
+"use client";
+import React, { useState } from "react";
+import styles from "./login.module.css";
+import { useRouter } from "next/navigation";
+import { authenticateUser } from "../../actions"; // Adjust the path if necessary
 
-const Login: React.FC =  () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
-  
 
-  const validEmail = "user@example.com";
-  const validPassword = "password123";
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if credentials match
-    if (email === validEmail && password === validPassword) {
-      // Save login state (using localStorage for simplicity)
-      localStorage.setItem("isLoggedIn", "true");
-      router.push('/home'); // Redirect to a protected page
-    } else {
-      setError("Invalid email or password");
+    try {
+      const result = await authenticateUser(email, password);
+
+      if (result) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("role", result.role); // Save user role if needed
+        router.push("/home"); // Redirect to the home page
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred. Please try again later.");
     }
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.loginCard}>
         <h2>Login</h2>
         <form onSubmit={handleLogin} className={styles.form}>
+          {error && <p className={styles.error}>{error}</p>}
           <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
@@ -50,16 +52,13 @@ const Login: React.FC =  () => {
               required
             />
           </div>
-          <button type="submit" className={styles.submitButton}>Login</button>
+          <button type="submit" className={styles.submitButton}>
+            Login
+          </button>
         </form>
-        
       </div>
     </div>
   );
 };
 
 export default Login;
-
-function setError(arg0: string) {
-    throw new Error('Function not implemented.');
-}

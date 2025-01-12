@@ -1,20 +1,25 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { FaPaperPlane, FaPaperclip } from 'react-icons/fa';
-import Sidebar from './sidebar';
-import styles from './cht-input.module.css';
+"use client";
+import React, { useState, useEffect } from "react";
+import { FaPaperPlane, FaPaperclip } from "react-icons/fa";
+import { useSearchParams } from "next/navigation";
+import Sidebar from "./sidebar";
+import styles from "./cht-input.module.css";
 
 export default function ChatInput() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState("");
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const searchParams = useSearchParams();
+  const role = searchParams.get("role"); // Retrieve the role from URL parameters
+
   const fullText = "Qu'est-ce que je peux faire pour vous ?";
 
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
-      if (index < fullText.length-1) {
+      if (index < fullText.length - 1) {
         setDisplayText((prev) => prev + fullText[index]);
         index++;
       } else {
@@ -31,9 +36,52 @@ export default function ChatInput() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log('Message:', message);
-    if (file) console.log('File:', file.name);
+  const handleSubmit = async () => {
+    if (!message && !file) {
+      alert("Please enter a message or upload a file.");
+      return;
+    }
+
+    const endpoint =
+      role === "guest"
+        ? "localhost:8000/api/guest"
+        : role === "etudiant"
+        ? "localhost:8000/api/etudiant"
+        : role === "admin"
+        ? "localhost:8000/api/admin"
+        : null;
+
+    if (!endpoint) {
+      alert("Invalid role. Please contact support.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("message", message);
+    if (file) {
+      formData.append("file", file);
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Response:", result);
+        alert("Message sent successfully!");
+        setMessage(""); // Clear the input field
+        setFile(null); // Reset the file input
+      } else {
+        const error = await response.text();
+        alert(`Error: ${error}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while sending the message.");
+    }
   };
 
   const toggleSidebar = () => {
@@ -41,8 +89,7 @@ export default function ChatInput() {
   };
 
   return (
-    <div className={`${styles.container} ${isSidebarOpen ? styles.shifted : ''}`}>
-      
+    <div className={`${styles.container} ${isSidebarOpen ? styles.shifted : ""}`}>
       <h2 className={styles.typewriter}>{displayText}</h2>
       <div className={styles.chatBox}>
         <input
@@ -57,7 +104,7 @@ export default function ChatInput() {
           <input
             type="file"
             id="file-upload"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={handleFileChange}
           />
         </label>
