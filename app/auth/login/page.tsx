@@ -21,8 +21,12 @@ const Login: React.FC = () => {
         localStorage.setItem("role", result.role); // Save user role if needed
         router.push("/home"); // Redirect to the home page
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again later.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "An error occurred. Please try again later.");
+      } else {
+        setError("An unknown error occurred. Please try again later.");
+      }
     }
   };
 

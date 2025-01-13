@@ -21,7 +21,7 @@ export async function authenticateUser(email: string, password: string) {
     }
 
     // Verify the hashed password
-    const bcrypt = await import("bcrypt");
+    const bcrypt = await import("bcryptjs");  // Use bcryptjs here
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -30,6 +30,10 @@ export async function authenticateUser(email: string, password: string) {
 
     return { role: user.role }; // Return the user role or other necessary data
   } catch (error) {
-    throw new Error(error.message || "Authentication failed");
+    if (error instanceof Error) {
+      throw new Error(error.message || "Authentication failed");
+    } else {
+      throw new Error("Authentication failed");
+    }
   }
 }

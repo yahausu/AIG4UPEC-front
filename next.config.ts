@@ -8,8 +8,10 @@ const nextConfig: NextConfig = {
         destination: '/auth/login',
         permanent: false, 
       },
+      
     ];
-  }
+  },
+  
 };
 
 export default nextConfig;

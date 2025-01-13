@@ -1,8 +1,8 @@
-# Step 1: Use a Node.js image to build the React project
+# Step 1: Build the Next.js app
 FROM node:18-alpine AS build
 
-# Install Python and build dependencies (required by bcrypt)
-RUN apk add --no-cache python3 make g++ 
+# Install dependencies required for bcrypt and other native modules
+RUN apk add --no-cache python3 make g++
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -16,18 +16,13 @@ RUN npm install
 # Copy the rest of the project files
 COPY . .
 
-# Build the project
+# Build the Next.js app
 RUN npm run build
 
-# Step 2: Use an Nginx image to serve the built React app
-FROM nginx:1.23
 
-# Copy the build output to Nginx's HTML directory
-COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 3000
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
-
+# Start the Next.js app
+CMD ["npm", "start"]

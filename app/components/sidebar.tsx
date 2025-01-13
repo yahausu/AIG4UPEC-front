@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { FaDatabase, FaQuestionCircle, FaHistory } from 'react-icons/fa';
 import styles from './sidebar.module.css';
 
 interface SidebarProps {
@@ -7,27 +7,36 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
       
-
       <div className={styles.servicesSection}>
+        <h3>Services</h3>
         <ul>
-          <li>Generate SQL</li>
-          <li>Generate QCM</li>
-          
+          <li>
+            <FaDatabase className={styles.icon} /> Generate SQL
+          </li>
+          <li>
+            <FaQuestionCircle className={styles.icon} /> Generate QCM
+          </li>
         </ul>
       </div>
 
       <div className={styles.divider}></div>
 
       <div className={styles.historySection}>
+        <h3>History</h3>
         <ul>
-          <li>Conversation 1</li>
-          <li>Conversation 2</li>
-          <li>Conversation 3</li>
-         
+          <li>
+            <FaHistory className={styles.icon} /> Conversation 1
+          </li>
+          <li>
+            <FaHistory className={styles.icon} /> Conversation 2
+          </li>
+          <li>
+            <FaHistory className={styles.icon} /> Conversation 3
+          </li>
         </ul>
       </div>
     </div>
