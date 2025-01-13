@@ -21,7 +21,7 @@ const UtilityBar: React.FC<UtilityBarProps> = ({ toggleSidebar }) => {
       <button onClick={toggleSidebar} className={styles.toggleButton}>
         <FaBars />
       </button>
-      <h1>IAG4UPEC</h1>
+      <img src="/logo.png" alt="IAG4UPEC Logo" className={styles.logo} />
       <button>
         <FaHome />
       </button>
